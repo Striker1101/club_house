@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  h3= title
+  div#container-chat
+   div.chat
+    div.text
+     each message in messages 
+      div.message(data-id=`${message.id}`)
+       p #{message.formatted_date}
+       p #{message.username}
+       p #{message.message}
+     else 
+      p No active chat yet
+     
+    form.message(action="", method="post")
+       input#text(type="text", name="text")
+       button(type="submit") submit 
+        

@@ -2,4 +2,11 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  div#container-home
+   div.welcome
+    p.speech 
+    p how do you plan to get in 
+    button(type="submit") 
+     a(href="/user/log-in") Log-in
+    button(type="submit") 
+     a(href="/chat/username")  Guest
