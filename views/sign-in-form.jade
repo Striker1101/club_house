@@ -4,7 +4,9 @@ block content
   h1(style='text-align:center;') Log in
   div#container-home.form-group
    form(action="", method="post") 
-
+    div.reply
+      if error
+        p #{error}
     label(for="name") USERNAME:
     input#username(type="text", name="username", required, placeholder='John@11')
     br

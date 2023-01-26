@@ -50,20 +50,50 @@ button {
 .chat {
   width: 90vw;
   background-color: white;
-  height: 82vh;
+  height: 75vh;
   border-radius: 20px;
 }
 .message {
   position: absolute;
-  bottom: 1px;
+  bottom: -45px;
   display: flex;
-
 }
 #text {
   width: 80vw;
   border-radius: 10px 10px;
-  border: 2px solid lightgrey;
+  border: 2px solid rgb(63, 53, 53);
 }
-.text{
+.text-cover {
+  display: flex;
+  gap: 5px;
+}
+.text {
   color: black;
+  margin-left: 10px;
+  width: 100%;
+  height: 75vh;
+  overflow: hidden;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+}
+img {
+  width: 80px;
+  max-height: 80px;
+  border-radius: 50px;
+}
+p {
+  width: fit-content;
+}
+.textlog {
+  word-wrap: break-word;
+  white-space: nowrap;
+  display: inline-block;
+  border: 2px solid red;
+  width: 80vw;
+}
+#content {
+  display: flex;
 }

@@ -1,19 +1,28 @@
 extends layout
 
 block content
-  h3= title
+  div#content
+   h3= title
+   if user  
+    button(type="submit")
+     a(href="/users/log-out")  Log out
   div#container-chat
    div.chat
-    div.text
-     each message in messages 
-      div.message(data-id=`${message.id}`)
-       p #{message.formatted_date}
-       p #{message.username}
-       p #{message.message}
-     else 
-      p No active chat yet
-     
-    form.message(action="", method="post")
-       input#text(type="text", name="text")
+     div.text
+      if messages.length
+        each message in messages 
+         div.text-cover
+           if user
+             img(src= message.image_id.imageUrl, alt="profile")
+            else
+             img(src="/images/dummy.png", alt="")
+           div(data-id=`${message.id}`)
+                p #{message.formatted_date}
+                p #{message.name}
+                p.textlog #{message.message}
+           
+     form.message(action="", method="post")
+       input#text(type="text", name="text", value=(undefined===chat ? "" : chat))
+       input(type="hidden", name="image", value= image)
        button(type="submit") submit 
         

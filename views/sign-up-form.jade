@@ -3,18 +3,27 @@ extends layout
 block content
   h1(style='text-align:center;') Sign up
   div#container-home.form-group
-   form(action="", method="post") 
+   form(action="", method="post",  enctype="multipart/form-data") 
+    
+    div.reply
+      if errors.length 
+        each error in errors 
+          p #{error}
+
     label(for="email") Email:
-    input#email(type="email", name="email") 
+    input#email(type="email", name="email", value=(undefined == user ? '' : user.email)) 
     br
 
-    label(for="name") USERNAME:
-    input#username(type="text", name="username", required, placeholder='John@11')
+    label(for="username") USERNAME:
+    input#username(type="text", name="username", required, placeholder='John@11',  value=(undefined == user ? '' : user.username) )
     br
 
     label(for="password") PASSWORD:
     input#password(type="password", name="password")   
     br
 
+    label(for="image") PROFILE PHOTO:  
+    input#image(type="file", name="image")
+    br
     button.btn.btn-primary(type="submit") submit
     

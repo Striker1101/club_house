@@ -12,20 +12,21 @@ const passport = require("passport");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var chatRouter = require("./routes/chat");
-
+const User = require('./models/user')
+const bcrypt = require("bcryptjs");
 var app = express();
 
 const mongoDb = process.env.MONGODB_URL;
 mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "mongo connection error"));
-
+  
 passport.use(
   new LocalStrategy((username, password, done) => {
     User.findOne({ username: username }, (err, user) => {
       if (err) {
         return done(err);
-      }
+      } 
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }

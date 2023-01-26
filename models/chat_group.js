@@ -3,9 +3,10 @@ const { DateTime } = require("luxon");
 const Schema = mongoose.Schema;
 
 const Chat_groupSchema = new Schema({
-  username: { type: String, required: true, unique: true },
+  name: { type: String, required: true, unique: false },
   date: { type: Date },
   message: { type: String, required: true, minLength: 1 },
+  image_id: { type: Schema.Types.ObjectId, ref: "Users", required: true, },
 });
 
 Chat_groupSchema.virtual("formatted_date").get(function () {

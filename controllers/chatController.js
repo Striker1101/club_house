@@ -1,19 +1,35 @@
 const { body, validationResult } = require("express-validator");
-const Users = require("../models/user");
+const User = require("../models/user");
 const Chat_Group = require("../models/chat_group");
 let _username = "";
-
+const async = require('async')
 
 exports.index = function (req, res, next) {
-  Chat_Group.find({}).exec(function (err, doc) {
-    if (err) {
-      return next(err);
+  async.parallel(
+    {
+      chat_group(callback) {
+        Chat_Group.find({}).populate("image_id").exec(callback);
+      },
+      user_id(callback) {
+        User.findOne({ username: "dummy" }, "_id").exec(callback);
+      },
+    },
+    (err, result) => {
+      if (err) {
+        return next(err);
+      }
+      if (res.locals.currentUser) {
+        _username = res.locals.currentUser.username;
+      }
+      res.render("chat-index", {
+        title: _username,
+        messages: result.chat_group,
+        user: res.locals.currentUser,
+        image:
+          res.locals.currentUser == undefined ? result.user_id._id: res.locals.currentUser._id,
+      });
     }
-    res.render("chat-index", {
-      title: _username,
-      messages: doc,
-    });
-  });
+  );
 };
 
 exports.index_post = [
@@ -25,19 +41,30 @@ exports.index_post = [
   (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
-    const { text } = req.body;
+    const { text, image } = req.body;
+
+    if (res.locals.currentUser) {
+      _username = res.locals.currentUser.username;
+    }
     const chat_group = new Chat_Group({
-      username: _username,
+      name: _username,
       date: new Date(),
       message: text,
+      image_id: image,
     });
 
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
-      res.render("/chat", {
-        title: _username,
-        chat: chat_group,
-        errors: errors.array(),
+      Chat_Group.find({}).exec(function (err, messages) {
+        if (err) {
+          return next(err);
+        }
+        res.render("chat-index", {
+          title: _username,
+          messages,
+          errors: errors.array(),
+          chat: chat_group.message,
+        });
       });
       return;
     } else {
@@ -60,6 +87,5 @@ exports.username_get = function (req, res, next) {
 exports.username_post = function (req, res, next) {
   const { username } = req.body;
   _username = username;
-  console.log(_username);
   res.redirect("/chat");
 };
